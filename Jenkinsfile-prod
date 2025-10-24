@@ -1,7 +1,7 @@
 // Jenkinsfile-test
 pipeline {
     agent {
-        label 'test' // Distinct agent for development builds
+        label 'prod' // Distinct agent for development builds
     }
     stages {
         stage('Build') {
@@ -13,7 +13,13 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'running a container from image and test internally...'
-                sh './test-container-dev.sh'
+                sh './test-container-prod.sh'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'deploying containerized application on prod...'
+                sh './deploy-container-prod.sh'
             }
         }
     }
