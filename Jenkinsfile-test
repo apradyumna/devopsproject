@@ -4,17 +4,6 @@ pipeline {
         label 'test' // Distinct agent for development builds
     }
     stages {
-        stage('Install Dependencies and Run Script') {
-            steps {
-                // Ensure the package list is up-to-date
-                sh 'sudo apt-get update'
-                
-                // Install curl
-                sh 'sudo apt-get install -y curl'
-                
-                echo 'curl installed...'
-            }
-        }
         stage('Build') {
             steps {
                 echo 'building the docker image...'
