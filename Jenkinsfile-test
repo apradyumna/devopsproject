@@ -1,0 +1,20 @@
+// Jenkinsfile-test
+pipeline {
+    agent {
+        label 'test' // Distinct agent for development builds
+    }
+    stages {
+        stage('Build') {
+            steps {
+                echo 'building the docker image...'
+                sh 'sudo docker build . -t devopsproject1'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'running a container from image and test internally...'
+                sh './test-container-dev.sh'
+            }
+        }
+    }
+}
