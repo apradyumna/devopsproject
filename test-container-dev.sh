@@ -3,7 +3,7 @@
 # Configuration
 # ==============================================================================
 # The name and tag of the Docker image to test (e.g., nginx:latest)
-IMAGE_NAME="nginx"
+IMAGE_NAME="devopsproject1"
 # The name to assign to the temporary container
 CONTAINER_NAME="internal-test-$(date +%s)"
 # The port the application inside the container is expected to listen on
@@ -11,7 +11,7 @@ CONTAINER_PORT="80"
 # The URL to check inside the container. Always use 'localhost'.
 HEALTH_CHECK_URL="http://localhost:${CONTAINER_PORT}"
 # How long to wait in total before giving up (in seconds)
-TIMEOUT_SECONDS=30
+TIMEOUT_SECONDS=10
 # How long to wait between retries (in seconds)
 RETRY_INTERVAL=5
 # ==============================================================================
