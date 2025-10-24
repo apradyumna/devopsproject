@@ -21,14 +21,14 @@ RETRY_INTERVAL=5
 cleanup_container() {
   echo "Cleaning up container ${CONTAINER_NAME}..."
   # The `|| true` prevents the script from failing if the container isn't there
-  docker stop "${CONTAINER_NAME}" >/dev/null 2>&1 || true
-  docker rm "${CONTAINER_NAME}" >/dev/null 2>&1 || true
+  sudo docker stop "${CONTAINER_NAME}" >/dev/null 2>&1 || true
+  sudo docker rm "${CONTAINER_NAME}" >/dev/null 2>&1 || true
 }
 # Function to clean up the container AND the image
 cleanup_all() {
   cleanup_container
   echo "Cleaning up image ${IMAGE_NAME}..."
-  docker rmi "${IMAGE_NAME}" >/dev/null 2>&1 || true
+  sudo docker rmi "${IMAGE_NAME}" >/dev/null 2>&1 || true
 }
 # ==============================================================================
 # Main script execution
@@ -37,7 +37,7 @@ cleanup_all() {
 trap cleanup_container EXIT
 # Stage 1: Run the container in detached mode
 echo "Starting test container '${CONTAINER_NAME}' from image '${IMAGE_NAME}' in detached mode..."
-if ! docker run -d --name "${CONTAINER_NAME}" "${IMAGE_NAME}"; then
+if ! sudo docker run -d --name "${CONTAINER_NAME}" "${IMAGE_NAME}"; then
   echo "ERROR: Failed to start the Docker container from image '${IMAGE_NAME}'."
   # The container was never created, so we don't need `cleanup_container`
   # but if we determine the image is the problem, it's appropriate to remove it.
@@ -47,7 +47,7 @@ fi
 # Stage 2: Wait for the service to become ready using an internal health check
 echo "Waiting for internal service to respond at ${HEALTH_CHECK_URL}..."
 for i in $(seq 1 $((TIMEOUT_SECONDS / RETRY_INTERVAL))); do
-  if docker exec "${CONTAINER_NAME}" curl --output /dev/null --silent --head --fail "${HEALTH_CHECK_URL}"; then
+  if sudo docker exec "${CONTAINER_NAME}" curl --output /dev/null --silent --head --fail "${HEALTH_CHECK_URL}"; then
     echo "Health check successful! The service is exposed on port ${CONTAINER_PORT} internally."
     exit 0 # Indicate success for the pipeline step
   else
