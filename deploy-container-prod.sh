@@ -18,4 +18,6 @@ if ! sudo docker run -itd -p 91:80 --name "${CONTAINER_NAME}" "${IMAGE_NAME}"; t
   # but if we determine the image is the problem, it's appropriate to remove it.
   # For now, we assume the run failure may not be image-related.
   exit 1
+else
+  exit 0 # Indicate success for the pipeline step
 fi
